@@ -143,6 +143,12 @@ section{position:relative;padding:96px 0}
 .card.featured ul{color:rgba(255,255,255,.92)}
 .card.featured .note,.card.featured .price s{color:rgba(255,255,255,.65)}
 .card.featured::after{content:"";position:absolute;inset:8px;border:1px solid rgba(232,210,154,.22);border-radius:16px;pointer-events:none}
+.card.featured .sub{margin-top:10px;font-size:14px;line-height:1.5;color:var(--gold-2)}
+.card.glow{box-shadow:0 30px 60px -28px rgba(48,16,75,.9),0 0 0 1px rgba(232,210,154,.5),0 0 22px 4px rgba(155,108,204,.35);animation:cardGlow 4.5s ease-in-out infinite}
+@keyframes cardGlow{
+  0%,100%{box-shadow:0 30px 60px -28px rgba(48,16,75,.9),0 0 0 1px rgba(232,210,154,.35),0 0 18px 2px rgba(155,108,204,.35)}
+  50%{box-shadow:0 30px 60px -28px rgba(48,16,75,.9),0 0 0 1px rgba(232,210,154,.7),0 0 28px 6px rgba(201,165,90,.35)}
+}
 .ribbon{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f3e2b4,var(--gold));color:var(--plum);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:7px 16px;border-radius:999px;white-space:nowrap;box-shadow:0 8px 18px -8px rgba(156,122,51,.9)}
 .chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px}
 .chip{border:1.5px solid var(--lilac-3);background:#fff;border-radius:14px;padding:12px 4px;font:700 15px/1 var(--sans);color:var(--plum);cursor:pointer;transition:all .2s}
@@ -383,15 +389,17 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
         <div class="price"><b>4 490 ₽</b><s>4 880 ₽</s></div>
         <button class="btn btn-gold" data-order="Сияющая кожа к празднику — 4 490 ₽">Оформить сертификат</button>
       </article>
-      <article class="card reveal">
-        <span class="tag">Увлажнение</span>
+      <article class="card featured glow reveal">
+        <span class="ribbon">Новогоднее предложение</span>
+        <span class="tag">Для кожи зимой</span>
         <h3>Свежесть и увлажнение</h3>
+        <p class="sub">Увлажнение и сияние кожи после холодов и отопления</p>
         <ul>
           <li>Консультация врача с 3D-диагностикой</li>
           <li>Биоревитализация Belotero Hydro</li>
         </ul>
-        <div class="price"><b>9 900 ₽</b><s>10 900 ₽</s></div>
-        <button class="btn btn-primary" data-order="Свежесть и увлажнение — 9 900 ₽">Оформить сертификат</button>
+        <div class="price"><b>6 500 ₽</b></div>
+        <button class="btn btn-gold" data-order="Свежесть и увлажнение — 6 500 ₽">Оформить сертификат</button>
       </article>
       <article class="card reveal">
         <span class="tag">Аппаратная процедура</span>
@@ -558,7 +566,7 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
             <label>Сертификат или сумма
               <select name="cert" id="fCert">
                 <option value="Сияющая кожа к празднику — 4 490 ₽">Сияющая кожа к празднику — 4 490 ₽</option>
-                <option value="Свежесть и увлажнение — 9 900 ₽">Свежесть и увлажнение — 9 900 ₽</option>
+                <option value="Свежесть и увлажнение — 6 500 ₽">Свежесть и увлажнение — 6 500 ₽</option>
                 <option value="Morpheus 8 — от 9 600 ₽">Morpheus 8 — от 9 600 ₽</option>
                 <option value="amount">На сумму</option>
               </select>
