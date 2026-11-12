@@ -13,6 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
+  --fade:150px;
   --plum:#3f1660;
   --plum-2:#5b2a85;
   --violet:#7b4aa8;
@@ -28,6 +29,7 @@
   --bg:#fdfbfe;
   --radius:22px;
   --shadow:0 18px 50px -22px rgba(63,22,96,.35);
+  --glow-soft:0 0 0 1px rgba(201,165,90,.10),0 24px 60px -30px rgba(63,22,96,.45),0 0 46px -6px rgba(155,108,204,.22),0 0 70px -20px rgba(201,165,90,.25);
   --serif:"Cormorant Garamond", "Times New Roman", serif;
   --sans:"Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
@@ -60,7 +62,11 @@ p{margin:0}
 .btn-block{width:100%}
 
 /* textured backgrounds — no flat blocks */
-.tex-white{
+.tex-white,.tex-lilac{position:relative;isolation:isolate;background:transparent}
+.tex-white::before,.tex-lilac::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%)}
+.tex-white::before{
   background:
     radial-gradient(circle at 12% 18%, rgba(201,165,90,.10) 0 2px, transparent 3px) 0 0/180px 180px,
     radial-gradient(circle at 70% 60%, rgba(123,74,168,.08) 0 1.5px, transparent 2.5px) 0 0/140px 140px,
@@ -68,7 +74,7 @@ p{margin:0}
     radial-gradient(800px 500px at 0% 100%, #f8f2fc 0, transparent 60%),
     var(--bg);
 }
-.tex-lilac{
+.tex-lilac::before{
   background:
     radial-gradient(circle at 20% 30%, rgba(201,165,90,.22) 0 1.6px, transparent 2.6px) 0 0/120px 120px,
     radial-gradient(circle at 80% 70%, rgba(255,255,255,.9) 0 1.4px, transparent 2.4px) 0 0/90px 90px,
@@ -76,7 +82,11 @@ p{margin:0}
     radial-gradient(900px 520px at 100% 100%, var(--lilac-3), transparent 65%),
     linear-gradient(160deg,var(--lilac),var(--lilac-2));
 }
+.hero.tex-white::before{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - var(--fade)),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - var(--fade)),transparent)}
 section{position:relative;padding:96px 0}
+section > .wrap{position:relative;z-index:2}
+.deco{position:absolute;z-index:0;pointer-events:none;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;color:var(--violet);opacity:.22}
+.deco.g{color:var(--gold-dk);opacity:.3}
 .monogram{position:absolute;pointer-events:none;opacity:.06;width:340px;mix-blend-mode:multiply}
 
 /* ---------- garland ---------- */
@@ -171,7 +181,10 @@ section{position:relative;padding:96px 0}
 
 /* ---------- doctors ---------- */
 .docs-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
-.doc{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:start;background:rgba(255,255,255,.9);border-radius:28px;padding:22px;border:1px solid rgba(123,74,168,.14);box-shadow:0 18px 44px -30px rgba(63,22,96,.55)}
+.doc{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:stretch;background:radial-gradient(120% 90% at 0% 0%,rgba(255,255,255,.96),rgba(255,255,255,.78) 60%,rgba(248,241,252,.7));border-radius:28px;padding:22px;box-shadow:var(--glow-soft)}
+.doc-info{display:flex;flex-direction:column;align-items:flex-start}
+.doc-photo{align-self:start}
+.doc-cta{margin-top:auto;padding-top:18px}
 .doc-photo{border-radius:120px 120px 18px 18px;overflow:hidden;aspect-ratio:3/4;background:var(--lilac)}
 .doc-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
 .doc h3{font-size:32px;margin-top:6px}
@@ -181,7 +194,7 @@ section{position:relative;padding:96px 0}
 .doc ul{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
 .doc li{font-size:12.5px;padding:5px 10px;border-radius:999px;border:1px solid var(--lilac-3);color:var(--muted)}
 .doc .src{margin-top:14px;font-size:12px;color:var(--muted)}
-.doc .btn{margin-top:18px;--h:46px;padding:0 22px;font-size:14px}
+.doc .btn{--h:46px;padding:0 22px;font-size:14px}
 
 /* ---------- atmosphere ---------- */
 .gallery{display:grid;grid-template-columns:1.1fr .9fr .9fr;grid-template-rows:280px 280px;gap:18px}
@@ -195,9 +208,11 @@ section{position:relative;padding:96px 0}
 /* ---------- steps ---------- */
 .steps-wrap{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center}
 .steps-photo{position:relative}
-.steps-photo .arch{aspect-ratio:4/5;outline-offset:8px}
+.steps-photo .arch{aspect-ratio:4/5;outline:0;box-shadow:none;border-radius:0}
+.steps-photo .arch::after{display:none}
+.steps-photo .arch img{-webkit-mask-image:linear-gradient(to right,transparent 0,rgba(0,0,0,.35) 8%,#000 26%,#000 74%,rgba(0,0,0,.35) 92%,transparent 100%),linear-gradient(to bottom,transparent 0,rgba(0,0,0,.35) 8%,#000 24%,#000 76%,rgba(0,0,0,.35) 92%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0,rgba(0,0,0,.35) 8%,#000 26%,#000 74%,rgba(0,0,0,.35) 92%,transparent 100%),linear-gradient(to bottom,transparent 0,rgba(0,0,0,.35) 8%,#000 24%,#000 76%,rgba(0,0,0,.35) 92%,transparent 100%);mask-composite:intersect}
 .steps{list-style:none;margin:0;padding:0;display:grid;gap:18px;counter-reset:s}
-.step{position:relative;display:grid;grid-template-columns:64px 1fr;gap:20px;align-items:start;padding:24px;border-radius:var(--radius);background:rgba(255,255,255,.88);border:1px solid rgba(123,74,168,.14)}
+.step{position:relative;display:grid;grid-template-columns:64px 1fr;gap:20px;align-items:start;padding:24px;border-radius:var(--radius);background:linear-gradient(120deg,rgba(255,255,255,.92),rgba(255,255,255,.62));box-shadow:var(--glow-soft)}
 .step .n{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:30px;font-weight:700;color:var(--plum);background:radial-gradient(circle at 30% 30%,#fff,var(--lilac-2));box-shadow:inset 0 0 0 1px var(--gold)}
 .step h3{font-size:25px}
 .step p{margin-top:6px;color:var(--muted);font-size:15px}
@@ -205,23 +220,23 @@ section{position:relative;padding:96px 0}
 
 /* ---------- form ---------- */
 .order{overflow:hidden}
-.order-box{position:relative;z-index:2;display:grid;grid-template-columns:.9fr 1.1fr;border-radius:32px;overflow:hidden;box-shadow:0 40px 80px -40px rgba(48,16,75,.7);background:#fff}
-.order-side{position:relative;padding:48px 40px;color:#fff;background:
+.order .bokeh{-webkit-mask-image:linear-gradient(transparent,#000 20%,#000 80%,transparent);mask-image:linear-gradient(transparent,#000 20%,#000 80%,transparent)}
+.order-box{position:relative;z-index:2;display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:stretch}
+#formZone{border-radius:32px;background:radial-gradient(circle at 90% 10%, rgba(201,165,90,.12) 0 2px, transparent 3px) 0 0/110px 110px,linear-gradient(180deg,rgba(255,255,255,.97),rgba(251,247,253,.9));box-shadow:var(--glow-soft)}
+.order-side{position:relative;padding:48px 40px;color:#fff;border-radius:32px;box-shadow:0 30px 70px -36px rgba(48,16,75,.8),0 0 50px -8px rgba(155,108,204,.45),0 0 80px -24px rgba(201,165,90,.4);background:
    radial-gradient(circle at 20% 20%, rgba(232,210,154,.25) 0 1.5px, transparent 2.5px) 0 0/80px 80px,
    radial-gradient(600px 400px at 100% 100%, rgba(123,74,168,.6), transparent 60%),
    linear-gradient(165deg,#4b1d70,#2a0c43);overflow:hidden}
 .order-side h2{color:#fff}
 .order-side p{margin-top:16px;color:rgba(255,255,255,.82)}
 .order-side .eyebrow{color:var(--gold-2)}
-.gift-card{margin-top:34px;position:relative;border-radius:18px;padding:22px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1px solid rgba(232,210,154,.5);backdrop-filter:blur(4px)}
+.gift-card{margin-top:34px;position:relative;border-radius:18px;padding:22px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04));box-shadow:inset 0 0 0 1px rgba(232,210,154,.18),0 0 26px -4px rgba(232,210,154,.38),0 0 50px -10px rgba(190,150,240,.45);backdrop-filter:blur(4px)}
 .gift-card img{width:54px;height:54px;border-radius:50%;background:#fff;object-fit:cover}
 .gift-card .gc-top{display:flex;align-items:center;justify-content:space-between}
 .gift-card .gc-top span{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-2)}
 .gift-card b{display:block;font-family:var(--serif);font-size:30px;margin-top:18px;font-weight:600}
 .gift-card small{display:block;opacity:.7;font-size:12px;margin-top:4px}
-form{padding:48px 44px;display:grid;gap:16px;align-content:start;background:
-  radial-gradient(circle at 90% 10%, rgba(201,165,90,.12) 0 2px, transparent 3px) 0 0/110px 110px,
-  linear-gradient(180deg,#fff,#fbf7fd)}
+form{padding:48px 44px;display:grid;gap:16px;align-content:start;background:transparent}
 label{display:grid;gap:7px;font-size:13px;font-weight:600;color:var(--plum)}
 label .opt{font-weight:500;color:var(--muted)}
 input,select{font:500 16px var(--sans);color:var(--ink);height:52px;border-radius:14px;border:1.5px solid var(--lilac-3);padding:0 16px;background:#fff;width:100%;-webkit-appearance:none;appearance:none}
@@ -238,7 +253,7 @@ input:focus,select:focus{outline:none;border-color:var(--violet);box-shadow:0 0 
 
 /* ---------- contacts ---------- */
 .contacts-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:stretch}
-.c-card{border-radius:28px;padding:40px;background:rgba(255,255,255,.92);border:1px solid rgba(123,74,168,.14);box-shadow:0 18px 44px -30px rgba(63,22,96,.55)}
+.c-card{border-radius:28px;padding:40px;background:linear-gradient(150deg,rgba(255,255,255,.95),rgba(255,255,255,.75));box-shadow:var(--glow-soft)}
 .c-card h2{font-size:clamp(32px,4vw,44px)}
 .c-line{display:flex;gap:14px;align-items:flex-start;margin-top:22px}
 .c-line svg{flex:none;width:22px;height:22px;color:var(--gold-dk);margin-top:2px}
@@ -256,8 +271,8 @@ input:focus,select:focus{outline:none;border-color:var(--violet);box-shadow:0 0 
 .c-photo .badge b{display:block;color:var(--plum);font-family:var(--serif);font-size:22px;line-height:1.1}
 .c-photo .badge span{font-size:13px;color:var(--muted)}
 
-footer{padding:40px 0 110px;text-align:center;font-size:12.5px;color:var(--muted);background:
-  radial-gradient(circle at 50% 0%, var(--lilac), transparent 70%), var(--bg);border-top:1px solid rgba(123,74,168,.12)}
+footer{position:relative;padding:40px 0 110px;text-align:center;font-size:12.5px;color:var(--muted);background:
+  radial-gradient(circle at 50% 0%, var(--lilac), transparent 70%), var(--bg);}
 footer p+p{margin-top:8px}
 footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--plum);font-size:12px}
 
@@ -276,7 +291,8 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
   .cards{grid-template-columns:repeat(2,1fr)}
   .card.featured{transform:none}.card.featured:hover{transform:translateY(-4px)}
   .whom-grid{grid-template-columns:repeat(2,1fr)}
-  .docs-grid{grid-template-columns:1fr}
+  .doc{grid-template-columns:1fr;padding:18px}
+  .doc-photo{aspect-ratio:1/1;border-radius:24px}
 }
 @media (max-width:860px){
   section{padding:72px 0}
@@ -293,7 +309,7 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
   .gallery figure:nth-child(4) img{object-position:50% 60%}
   .steps-wrap{grid-template-columns:1fr;gap:36px}
   .steps-photo{width:min(360px,80%);margin:0 auto}
-  .order-box{grid-template-columns:1fr}
+  .order-box{grid-template-columns:1fr;gap:18px}
   .order-side{padding:36px 26px}
   form{padding:32px 22px}
   .contacts-grid{grid-template-columns:1fr}
@@ -308,8 +324,7 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
   .who b{font-size:28px}
   .who p{font-size:14px}
   .who .ico{width:32px;height:32px;margin-bottom:12px}
-  .doc{grid-template-columns:1fr;padding:18px}
-  .doc-photo{aspect-ratio:1/1;border-radius:24px}
+  .docs-grid{grid-template-columns:1fr}
   .gallery{grid-template-columns:1fr 1fr;grid-template-rows:200px 200px 170px;gap:10px}
   .hero-actions .btn{flex:1 1 100%}
   .row2{grid-template-columns:1fr}
@@ -322,6 +337,12 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
   .garland{height:52px}
   .divider{margin:-24px 0 -28px}
 }
+@media (max-width:700px){
+  :root{--fade:90px}
+  .deco{scale:.6;opacity:.16}
+  .deco.g{opacity:.22}
+  .deco.m-hide{display:none}
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -331,6 +352,15 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-bottle" viewBox="0 0 60 130"><path d="M24 4h12v14H24z"/><path d="M22 18h16l-1 8H23z"/><path d="M27 26v8M33 26v8"/><rect x="12" y="34" width="36" height="88" rx="10"/><path d="M12 62h36M12 96h36"/><path d="M22 72c4 6 12 6 16 0"/><path d="M30 40v14"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 40 56"><path d="M20 3C20 3 5 22 5 34a15 15 0 0 0 30 0C35 22 20 3 20 3z"/><path d="M13 36a7 7 0 0 0 6 7"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 110 140"><path d="M20 136C40 96 58 60 96 8"/><path d="M50 82c-24-2-36-18-38-36 20 0 34 14 38 36z"/><path d="M64 58c-2-22 10-38 28-44 4 20-8 36-28 44z"/><path d="M38 104c18-12 38-10 52 2-16 12-36 12-52-2z"/><path d="M30 50l20 32M84 22L64 58M90 106H38"/></symbol>
+    <symbol id="i-jar" viewBox="0 0 90 80"><rect x="10" y="6" width="70" height="18" rx="6"/><path d="M14 24h62v40a10 10 0 0 1-10 10H24a10 10 0 0 1-10-10z"/><path d="M28 46h34M34 54h22"/></symbol>
+    <symbol id="i-pipette" viewBox="0 0 40 130"><rect x="12" y="4" width="16" height="26" rx="8"/><path d="M14 30h12v10H14z"/><path d="M17 40h6l-1 72-2 12-2-12z"/><circle cx="20" cy="126" r="2"/></symbol>
+  </defs>
+</svg>
 
 <!-- 1. HERO -->
 <header class="hero tex-white" id="top">
@@ -370,6 +400,10 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
 <!-- 2. CERTIFICATES -->
 <section class="certs tex-lilac" id="certificates">
   <div class="bokeh" data-bokeh="certs"></div>
+  <svg class="deco " style="left:2%;top:70px;transform-origin:left top;rotate:-8deg" width="58" height="126" aria-hidden="true"><use href="#i-bottle"/></svg>
+  <svg class="deco g m-hide" style="left:7%;top:230px" width="22" height="32" aria-hidden="true"><use href="#i-drop"/></svg>
+  <svg class="deco g" style="right:1.5%;top:56px;transform-origin:right top;rotate:12deg" width="96" height="122" aria-hidden="true"><use href="#i-leaf"/></svg>
+  <svg class="deco m-hide" style="right:4%;bottom:70px" width="30" height="42" aria-hidden="true"><use href="#i-drop"/></svg>
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Сертификаты</span>
@@ -465,6 +499,10 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
 
 <!-- 4. DOCTORS -->
 <section class="docs tex-lilac" id="doctors">
+  <svg class="deco g" style="left:1%;top:60px;transform:scaleX(-1)" width="92" height="118" aria-hidden="true"><use href="#i-leaf"/></svg>
+  <svg class="deco m-hide" style="right:3%;top:90px;rotate:18deg" width="30" height="104" aria-hidden="true"><use href="#i-pipette"/></svg>
+  <svg class="deco m-hide" style="right:2%;bottom:60px" width="78" height="70" aria-hidden="true"><use href="#i-jar"/></svg>
+  <svg class="deco g m-hide" style="left:4%;bottom:90px" width="22" height="32" aria-hidden="true"><use href="#i-drop"/></svg>
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Врачи</span>
@@ -473,7 +511,7 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
     <div class="docs-grid">
       <article class="doc reveal">
         <div class="doc-photo"><img src="images/serkova.jpg" alt="Елизавета Серкова" loading="lazy"></div>
-        <div>
+        <div class="doc-info">
           <h3>Елизавета Серкова</h3>
           <p class="role">Врач-косметолог, врач-дерматовенеролог</p>
           <span class="edu">Высшее медицинское образование</span>
@@ -481,17 +519,17 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
           <ul>
             <li>Ботулинотерапия</li><li>Мезотерапия / биоревитализация</li><li>Лечебные чистки лица</li><li>Уход по типу кожи</li><li>Массаж лица</li><li>Консультации косметолога / дерматолога</li><li>Аппаратные процедуры</li><li>Контурная пластика губ</li>
           </ul>
-          <a class="btn btn-primary" href="https://dikidi.net/1974781" target="_blank" rel="noopener">Записаться к врачу</a>
+          <div class="doc-cta"><a class="btn btn-primary" href="https://dikidi.net/1974781" target="_blank" rel="noopener">Записаться к врачу</a></div>
         </div>
       </article>
       <article class="doc reveal">
         <div class="doc-photo"><img src="images/ivanova.jpg" alt="Дарья Иванова" loading="lazy"></div>
-        <div>
+        <div class="doc-info">
           <h3>Дарья Иванова</h3>
           <p class="role">Врач-косметолог</p>
           <span class="edu">Оценка 5 в Dikidi</span>
           <p class="quote">Ведёт приём в клинике LISANTI. Записаться к Дарье можно онлайн через Dikidi в удобное время.</p>
-          <a class="btn btn-primary" href="https://dikidi.net/1974781" target="_blank" rel="noopener">Записаться к врачу</a>
+          <div class="doc-cta"><a class="btn btn-primary" href="https://dikidi.net/1974781" target="_blank" rel="noopener">Записаться к врачу</a></div>
         </div>
       </article>
     </div>
@@ -540,6 +578,10 @@ footer .warn{font-weight:700;letter-spacing:.06em;text-transform:uppercase;color
 <!-- 7. FORM -->
 <section class="order tex-white" id="order">
   <div class="bokeh" data-bokeh="order"></div>
+  <svg class="deco g" style="left:2.5%;top:70px" width="26" height="36" aria-hidden="true"><use href="#i-drop"/></svg>
+  <svg class="deco m-hide" style="left:1.5%;bottom:80px;rotate:6deg" width="52" height="114" aria-hidden="true"><use href="#i-bottle"/></svg>
+  <svg class="deco " style="right:1.5%;top:60px;transform-origin:right top;rotate:-10deg" width="90" height="116" aria-hidden="true"><use href="#i-leaf"/></svg>
+  <svg class="deco g m-hide" style="right:3%;bottom:90px;rotate:-20deg" width="28" height="98" aria-hidden="true"><use href="#i-pipette"/></svg>
   <div class="wrap">
     <div class="order-box reveal">
       <div class="order-side">
